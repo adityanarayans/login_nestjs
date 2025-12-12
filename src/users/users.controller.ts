@@ -19,7 +19,7 @@ export class UsersController {
 
   @Get('me')
   async getMe(@Req() req: any) {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     const user = await this.usersService.findById(userId);
     if (!user) throw new NotFoundException('User not found');
     return { id: user.id, email: user.email, name: user.name };
@@ -27,14 +27,15 @@ export class UsersController {
 
   @Put('me')
   async updateMe(@Req() req: any, @Body() dto: UpdateUserDto) {
-    const userId = req.user.userId;
+      console.log("REQ.USER in PUT ===>", req.user);
+     const userId = req.user.sub;
     const updated = await this.usersService.updateUser(userId, dto);
     return { id: updated.id, email: updated.email, name: updated.name };
   }
 
   @Delete('me')
   async deleteMe(@Req() req: any) {
-    const userId = req.user.userId;
+   const userId = req.user.sub;
     return this.usersService.deleteUser(userId);
   }
 }
